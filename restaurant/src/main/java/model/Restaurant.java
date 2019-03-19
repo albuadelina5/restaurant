@@ -11,8 +11,27 @@ public class Restaurant {// clasa Restaurant are 2 atribute de tip ArrayList
 	ArrayList<Reservation> reservationList = new ArrayList<Reservation>();//aici aplez contructoru pentru ArrayList
 	// am pus = new ArrayList<Reservation>() mai sus pentru a crea o lista goala pentru atributul reservationList
 	// cu scoul de a putea adauga la aceasta lista elemente
-	ArrayList<Table> tableList = new ArrayList<Table>();
+	private ArrayList<Table> tableList = new ArrayList<Table>();
+	private Menu menu;
 	
+	public Menu getMenu() {
+		return menu;
+	}
+
+	public void setMenu(Menu menu) {
+		this.menu = menu;
+	}
+
+	public Restaurant() {
+		
+	}
+	
+	public ArrayList<Table> getTableList() {
+		return tableList;
+	}
+	public void setTableList(ArrayList<Table> tableList) {
+		this.tableList = tableList;
+	}
 	public void createReservation(int startTime,String firstName, String LastName,int reservationSize){
 		// metoda are scoul de a adauga un obiect de tipul rezervare in atributul de tip list reservationLists
 		Random random = new Random();// folosesc variabila random de tip Random pentru a genera un id aleatoriu pentru rezervare
@@ -28,44 +47,30 @@ public class Restaurant {// clasa Restaurant are 2 atribute de tip ArrayList
 			}
 		}
 		Reservation newReservation = new Reservation(reserver,reservationID,startTime,reservationSize,reservedTable);
-		reservationList.add(newReservation);
+		this.reservationList.add(newReservation);
 	}
 	public void cancelReservation(Reservation reservation){
 		reservationList.remove(reservation);
 	}
-	
-	public static void main(String args[]) {
-		
-		Menu menu = new Menu();
-		menu.dishes.add(new Dish("Fish and chips",25));
-		menu.dishes.add(new Dish("CHicken soup",10));
-		menu.dishes.add(new Dish("Pork steak",45));
-		menu.dishes.add(new Dish("Asian chicken",30));
-		menu.dishes.add(new Dish("Hamburger",17));
-		
-		Restaurant restaurant = new Restaurant();
-		restaurant.tableList.add(new Table(1,2));
-		restaurant.tableList.add(new Table(2,4));
-		restaurant.tableList.add(new Table(3,2));
-		restaurant.tableList.add(new Table(4,4));
-		
-		restaurant.createReservation(20, "Marius", "Popescu", 3);
-		Bill bill = restaurant.reservationList.get(0).client.createOrder(menu);
-		bill.computeTotal(); // variabila.metoda(cu sau fara argumente aici)
-		for(int i = 0;i<restaurant.reservationList.size();i++) {
-			Reservation r = restaurant.reservationList.get(i);
-			Client c = restaurant.reservationList.get(i).client;
-			String show = c.lastName +" "+ c.lastName + " Number of people : "+ r.numberOfPeople + " at Table: " + r.table.id + "\n";
-			System.out.println(show);
+
+	public void createRandomScenario() {
+		Random random = new Random();
+		// Create random reservations
+		for(int i=0;i< random.nextInt(10)+2;i++){
+			this.createReservation(random.nextInt(24), Integer.toString(i), "Client ", random.nextInt(4)+1);
 		}
-		System.out.println("Order is: \n");
-		for(int i = 0;i<bill.dishes.size();i++) {
-			Dish d = bill.dishes.get(i);
-			System.out.println(d.name + " " + d.price + "\n");
+		
+		// Add random dishes to each reservation
+		for(int i=0;i< random.nextInt(10)+2;i++){
+			this.createReservation(random.nextInt(24), Integer.toString(i), "Client ", random.nextInt(4)+1);
 		}
-		System.out.println("Total bill is " + bill.total);
-		
-		
+		// Create random bills
+		for(int i = 0;i<this.reservationList.size();i++) {
+			Bill random_bill = this.reservationList.get(i).client.createOrder(this.menu);
+			random_bill.computeTotal();
+			this.reservationList.get(i).bill = random_bill;
+			System.out.println(this.reservationList.get(i).toString());
+		}
 	}
 	
 }

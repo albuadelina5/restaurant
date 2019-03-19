@@ -9,4 +9,10 @@ public class Dish {
 		this.name = name;
 		this.price = price;
 	}
+
+	@Override
+	public String toString() {
+		return "Dish [name=" + name + ", price=" + price + "]";
+	}
+	
 }
